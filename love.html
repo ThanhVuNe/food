@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Valentine 💖</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: radial-gradient(circle at center, #0a0a0a, #000);
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Mưa */
+    .rain {
+        position: fixed;
+        width: 2px;
+        background: linear-gradient(transparent, rgba(255,255,255,0.7));
+        animation: rainFall linear infinite;
+        opacity: 0.4;
+        z-index: 1;
+    }
+
+    @keyframes rainFall {
+        0% { transform: translateY(-100vh); }
+        100% { transform: translateY(100vh); }
+    }
+
+    /* Tuyết */
+    .snow {
+        position: fixed;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 0 10px white;
+        animation: snowFall linear infinite;
+        opacity: 0.8;
+        z-index: 2;
+    }
+
+    @keyframes snowFall {
+        0% { transform: translateY(-10vh) translateX(0); }
+        100% { transform: translateY(110vh) translateX(50px); }
+    }
+
+    /* Trái tim */
+    .heart {
+        position: relative;
+        width: 120px;
+        height: 110px;
+        background: linear-gradient(45deg, #ff0080, #ff4dff);
+        transform: rotate(-45deg);
+        cursor: pointer;
+        animation: beat 1s infinite;
+        box-shadow: 0 0 30px #ff4dff, 0 0 60px #ff0080;
+        z-index: 10;
+        transition: 0.3s;
+    }
+
+    .heart.paused {
+        filter: grayscale(0.6);
+        box-shadow: 0 0 10px gray;
+    }
+
+    .heart::before,
+    .heart::after {
+        content: "";
+        position: absolute;
+        width: 120px;
+        height: 110px;
+        background: inherit;
+        border-radius: 50%;
+    }
+
+    .heart::before { top: -60px; left: 0; }
+    .heart::after { left: 60px; top: 0; }
+
+    @keyframes beat {
+        0%, 100% { transform: rotate(-45deg) scale(1); }
+        50% { transform: rotate(-45deg) scale(1.15); }
+    }
+
+    /* Chữ rơi */
+    .falling-text {
+        position: absolute;
+        font-weight: bold;
+        animation: fall linear forwards;
+        pointer-events: none;
+        z-index: 5;
+    }
+
+    @keyframes fall {
+        0% { transform: translateY(-10vh); opacity: 1; }
+        100% { transform: translateY(110vh); opacity: 0; }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="heart" id="heart"></div>
+
+<script>
+    const messages = [
+        "Vũ yêu Viên",
+        "Viên dễ thương",
+        "Kỉ niệm 2 năm",
+        "Viên đẹp gái",
+        "Viên cưới chồng đại gia",
+        "Viên mê Vũ",
+        "Viên nghiện Vũ"
+    ];
+
+    const colors = [
+        "#ff4dff",
+        "#ff1493",
+        "#ff69b4",
+        "#ff00ff",
+        "#ff85ff",
+        "#ff3399",
+        "#ff66ff"
+    ];
+
+    let isRunning = false;
+    let textInterval;
+
+    const heart = document.getElementById("heart");
+
+    heart.addEventListener("click", () => {
+        isRunning = !isRunning;
+
+        if (isRunning) {
+            heart.classList.remove("paused");
+            textInterval = setInterval(createText, 180);
+        } else {
+            heart.classList.add("paused");
+            clearInterval(textInterval);
+        }
+    });
+
+    function createText() {
+        const text = document.createElement("div");
+        text.classList.add("falling-text");
+        text.innerText = messages[Math.floor(Math.random() * messages.length)];
+
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        text.style.color = color;
+        text.style.textShadow = `0 0 10px ${color}, 0 0 20px ${color}`;
+        text.style.left = Math.random() * window.innerWidth + "px";
+        text.style.animationDuration = (3 + Math.random() * 2) + "s";
+        text.style.fontSize = (18 + Math.random() * 15) + "px";
+
+        document.body.appendChild(text);
+        setTimeout(() => text.remove(), 5000);
+    }
+
+    // Mưa nền
+    function createRain() {
+        const rain = document.createElement("div");
+        rain.classList.add("rain");
+        rain.style.left = Math.random() * window.innerWidth + "px";
+        rain.style.animationDuration = (0.5 + Math.random()) + "s";
+        rain.style.height = (50 + Math.random() * 100) + "px";
+        document.body.appendChild(rain);
+        setTimeout(() => rain.remove(), 2000);
+    }
+    setInterval(createRain, 40);
+
+    // Tuyết
+    function createSnow() {
+        const snow = document.createElement("div");
+        snow.classList.add("snow");
+        snow.style.left = Math.random() * window.innerWidth + "px";
+        snow.style.animationDuration = (4 + Math.random() * 3) + "s";
+        const size = (5 + Math.random() * 8) + "px";
+        snow.style.width = size;
+        snow.style.height = size;
+        document.body.appendChild(snow);
+        setTimeout(() => snow.remove(), 8000);
+    }
+    setInterval(createSnow, 200);
+</script>
+
+</body>
+</html>
