@@ -1,0 +1,177 @@
+/* =========================================================
+   HÔM NAY ĂN GÌ? — giao diện vui tươi, nhiều màu, mobile-first
+   ========================================================= */
+
+:root{
+  --c-coral:#FF6B35; --c-yellow:#FFD23F; --c-pink:#FF3CAC;
+  --c-teal:#2EC4B6; --c-purple:#8338EC; --c-blue:#3A86FF; --c-red:#FF4D6D;
+  --ink:#3a1d0c;            /* chữ tối nâu ấm */
+  --ink-soft:#7a5a44;       /* chữ phụ */
+  --font-head:'Baloo 2','Quicksand',system-ui,sans-serif;
+  --font-body:'Nunito',system-ui,-apple-system,sans-serif;
+}
+
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body{ margin:0; padding:0; }
+
+body{
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:linear-gradient(160deg,#FFE259 0%,#FFA751 45%,#FF6B9D 100%);
+  background-attachment:fixed;
+  min-height:100vh; min-height:100dvh;
+  overflow-x:hidden;
+}
+
+/* ---------- cục nền mờ trang trí ---------- */
+.bg-blob{ position:fixed; border-radius:50%; filter:blur(55px); opacity:.45; z-index:0; pointer-events:none; }
+.blob1{ width:300px; height:300px; background:#FFD23F; top:-90px; left:-90px; }
+.blob2{ width:320px; height:320px; background:#FF3CAC; bottom:-110px; right:-110px; }
+
+/* ---------- khung ứng dụng ---------- */
+.app{
+  position:relative; z-index:1;
+  width:100%; max-width:460px;
+  margin:0 auto;
+  min-height:100vh; min-height:100dvh;
+  padding:max(22px,env(safe-area-inset-top)) 18px max(28px,env(safe-area-inset-bottom));
+  display:flex; flex-direction:column;
+}
+
+/* ---------- nút âm thanh ---------- */
+.mute-btn{
+  position:fixed; top:max(14px,env(safe-area-inset-top)); right:14px; z-index:60;
+  width:46px; height:46px; border-radius:50%; border:none;
+  background:#fff; box-shadow:0 6px 16px rgba(0,0,0,.18);
+  font-size:20px; cursor:pointer; display:grid; place-items:center;
+  transition:transform .12s;
+}
+.mute-btn:active{ transform:scale(.9); }
+
+/* ---------- chuyển màn hình ---------- */
+.screen{ display:none; flex:1; flex-direction:column; }
+.screen.is-active{ display:flex; animation:fadeUp .35s ease both; }
+@keyframes fadeUp{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:none;} }
+
+/* ================= MÀN 1: CHỌN LOẠI ================= */
+.head{ text-align:center; margin:14px 0 8px; }
+.title{
+  font-family:var(--font-head); font-weight:800;
+  font-size:clamp(30px,9vw,42px); line-height:1.05; margin:0;
+  background:linear-gradient(135deg,#FF3CAC,#FF6B35 55%,#FFD23F);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.subtitle{ margin:8px 0 0; font-size:15px; font-weight:600; color:var(--ink-soft); }
+
+.cards{ display:flex; flex-direction:column; gap:16px; margin:22px 0 10px; }
+.cat-card{
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  background:#fff; border:none; border-radius:26px;
+  padding:22px 16px; width:100%; cursor:pointer; text-align:center;
+  box-shadow:0 12px 26px rgba(255,107,53,.20);
+  transition:transform .14s ease, box-shadow .14s ease;
+  font-family:var(--font-body);
+}
+.cat-card:hover{ transform:translateY(-3px); box-shadow:0 16px 32px rgba(255,107,53,.28); }
+.cat-card:active{ transform:scale(.97); }
+.emoji-wrap{
+  width:88px; height:88px; border-radius:50%;
+  display:grid; place-items:center; font-size:48px; line-height:1;
+  box-shadow:inset 0 -6px 12px rgba(0,0,0,.08); margin-bottom:4px;
+}
+.grad-orange{ background:linear-gradient(135deg,#FFD23F,#FF6B35); }
+.grad-pink{ background:linear-gradient(135deg,#FF3CAC,#8338EC); }
+.cat-card .label{ font-family:var(--font-head); font-weight:700; font-size:23px; color:var(--ink); }
+.cat-card .desc{ font-size:13.5px; color:var(--ink-soft); font-weight:600; }
+
+.tip{ text-align:center; font-size:13px; color:var(--ink-soft); margin-top:auto; padding-top:14px; }
+.tip code{ background:rgba(255,255,255,.6); padding:2px 7px; border-radius:8px; font-weight:700; }
+
+/* ================= MÀN 2: VÒNG XOAY ================= */
+.wheel-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin:6px 0 4px; }
+.cat-title{ font-family:var(--font-head); font-weight:700; font-size:20px; color:var(--ink); }
+.icon-btn{
+  width:44px; height:44px; border-radius:14px; border:none; cursor:pointer;
+  background:#fff; box-shadow:0 6px 14px rgba(0,0,0,.14);
+  font-size:22px; display:grid; place-items:center; color:var(--ink);
+  transition:transform .12s;
+}
+.icon-btn:active{ transform:scale(.9); }
+.icon-btn.ghost{ background:transparent; box-shadow:none; }
+
+.wheel-stage{
+  position:relative; width:min(86vw,360px); aspect-ratio:1;
+  margin:18px auto 0; align-self:center;
+}
+/* mũi tên chỉ kết quả (đỉnh trên) */
+.pointer{
+  position:absolute; top:-4px; left:50%; transform:translateX(-50%);
+  width:0; height:0; z-index:6;
+  border-left:15px solid transparent; border-right:15px solid transparent;
+  border-top:28px solid var(--c-coral);
+  filter:drop-shadow(0 3px 3px rgba(0,0,0,.25));
+}
+#wheelCanvas{ width:100%; height:100%; display:block; }
+
+/* nút QUAY ở giữa vòng */
+.spin-btn{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:24%; aspect-ratio:1; border-radius:50%; border:none; cursor:pointer; z-index:7;
+  background:radial-gradient(circle at 32% 30%, #fff 0%, #ffe08a 70%, #ffb347 100%);
+  color:var(--c-coral);
+  font-family:var(--font-head); font-weight:800;
+  font-size:clamp(12px,3.4vw,15px); letter-spacing:.5px;
+  box-shadow:0 5px 0 rgba(178,90,30,.45), 0 10px 18px rgba(0,0,0,.22);
+  transition:transform .1s, box-shadow .1s;
+}
+.spin-btn:active{ transform:translate(-50%,-50%) translateY(4px); box-shadow:0 1px 0 rgba(178,90,30,.45),0 4px 10px rgba(0,0,0,.2); }
+.spin-btn:disabled{ opacity:.7; cursor:default; }
+
+.wheel-tip{ text-align:center; font-size:14px; font-weight:600; color:var(--ink-soft); margin:18px 0 4px; }
+.wheel-tip strong{ color:var(--c-coral); }
+
+/* ================= MÀN 3: KẾT QUẢ ================= */
+.overlay{
+  position:fixed; inset:0; z-index:50;
+  display:none; flex-direction:column; align-items:center; justify-content:center;
+  gap:26px; padding:24px;
+}
+.overlay.is-active{ display:flex; animation:fadeIn .3s ease both; }
+@keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+.result-bg{ position:absolute; inset:0; background:rgba(58,29,12,.45); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
+
+/* thẻ lật 3D */
+.result-card{
+  width:min(78vw,300px); aspect-ratio:1; position:relative; z-index:2;
+  transform-style:preserve-3d; -webkit-transform-style:preserve-3d;
+  transition:transform .7s cubic-bezier(.2,.85,.25,1);
+}
+.result-card.flipped{ transform:rotateY(180deg); }
+.face{
+  position:absolute; inset:0; border-radius:30px;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+  box-shadow:0 24px 50px rgba(0,0,0,.3);
+}
+.face.back{ background:linear-gradient(135deg,#FFD23F,#FF6B35 60%,#FF3CAC); font-size:96px; }
+.face.front{ background:#fff; transform:rotateY(180deg); border:4px solid #FFD23F; }
+.res-emoji{ font-size:clamp(80px,28vw,110px); line-height:1; }
+.res-name{ font-family:var(--font-head); font-weight:800; font-size:clamp(22px,6.5vw,28px); color:var(--ink); text-align:center; padding:0 16px; }
+
+.result-actions{ position:relative; z-index:2; display:flex; gap:12px; flex-wrap:wrap; justify-content:center; }
+.btn{
+  font-family:var(--font-head); font-weight:700; font-size:16px;
+  padding:13px 20px; border-radius:16px; border:none; cursor:pointer;
+  transition:transform .12s, box-shadow .12s;
+}
+.btn:active{ transform:scale(.95); }
+.btn-primary{ background:linear-gradient(135deg,#FF6B35,#FF3CAC); color:#fff; box-shadow:0 8px 18px rgba(255,59,172,.4); }
+.btn-ghost{ background:#fff; color:var(--ink); box-shadow:0 6px 14px rgba(0,0,0,.18); }
+
+/* ---------- pháo giấy ---------- */
+.confetti{ position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:55; }
+
+/* ---------- tôn trọng "giảm chuyển động" ---------- */
+@media (prefers-reduced-motion:reduce){
+  *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+}
